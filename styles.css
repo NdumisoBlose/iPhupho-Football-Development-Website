@@ -1,0 +1,271 @@
+/* -------------------------------
+   Global Styles
+-------------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column; /* stack header, content, footer */
+}
+
+main{
+  flex: 1;
+}
+body {
+  font-family: 'Poppins', Arial, sans-serif;
+  background-color: #0D1B2A; /* deep navy background */
+  color: #FFFFFF;
+  line-height: 1.6;
+}
+
+
+
+/* -------------------------------
+   Navigation
+-------------------------------- */
+header {
+  background-color: #1B2735; /* dark navy bar */
+  padding: 15px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+nav {
+  display: flex;
+  text-align: center;
+  margin-bottom: 40px;
+  justify-content: space-between;
+}
+
+nav .logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #FF5722; /* bright orange for logo text */
+  text-transform: uppercase;
+}
+
+.logo img {
+  height: 150px;   /* adjust size */
+  width: auto;    /* keeps proportions */
+  display: block; /* removes extra spacing */
+  margin: 15px 10px ;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  margin: 0;
+  padding: 25px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #FFFFFF;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #FF5722; /* orange hover */
+}
+.container a
+{
+   text-decoration: none;
+  color: #FFFFFF;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+.container a:hover
+{
+  color: #FF5722;
+}
+
+/* -------------------------------
+   Hero Section
+-------------------------------- */
+.hero {
+  background: linear-gradient(rgba(13, 27, 42, 0.7), rgba(13, 27, 42, 0.7)),
+              url('hero\ background\ pic.jpeg') center/cover no-repeat;
+  color: #FFFFFF;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px;
+
+
+}
+
+.hero::before {
+  content: "";
+  position: static;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("images/hero\ background\ pic.jpeg") no-repeat center center/cover;
+  opacity: 0.6;   /* <-- controls image transparency */
+  z-index: -1;    /* keeps it behind the text */
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #FF5722;
+}
+
+.hero p {
+  margin: 15px 0;
+  font-size: 1.2rem;
+}
+
+.hero .btn {
+  display: inline-block;
+  background: #FF5722;
+  color: #FFFFFF;
+  padding: 10px 25px;
+  text-decoration: none;
+  border-radius: 30px;
+  transition: background 0.3s ease;
+}
+
+.hero .btn:hover {
+  background: #FF3D00; /* red-orange accent */
+}
+
+/* -------------------------------
+   Sections
+-------------------------------- */
+section {
+  padding: 60px 20px;
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+section h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  color: #FF5722;
+}
+
+section h3, h4, p
+{
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* -------------------------------
+   Cards (About, Coaches, Programs)
+-------------------------------- */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #1B2735;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+
+/* -------------------------------
+   Gallery
+-------------------------------- */
+.video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0; /* optional spacing */
+}
+
+/* -------------------------------
+   Contact Form
+-------------------------------- */
+form {
+  max-width: 600px;
+  margin: auto;
+  background: #1B2735;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #FFFFFF;
+}
+
+form input,
+form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 5px;
+}
+
+form button {
+  background: #FF5722;
+  color: #FFFFFF;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+form button:hover {
+  background: #FF3D00;
+}
+
+/* -------------------------------
+   Footer
+-------------------------------- */
+footer {
+  background: #1B2735;
+  text-align: center;
+  padding: 15px;
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #CCCCCC;
+  margin-top: auto;
+}
+
+/* -------------------------------
+   Responsive
+-------------------------------- */
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+}
