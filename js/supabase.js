@@ -17,5 +17,5 @@ console.log("Supabase ready:", window.supabaseClient)
 
 
 // run safely after page load
-window.addEventListener("DOMContentLoaded", initSupabase)
+
 console.log("Supabase initialized successfully")
