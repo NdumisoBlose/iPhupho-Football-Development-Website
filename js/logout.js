@@ -1,21 +1,14 @@
 window.addEventListener("DOMContentLoaded", () => {
 
-  const logoutBtn = document.getElementById("logoutBtn")
+  const btn = document.getElementById("logoutBtn")
+  if (!btn) return
 
-  if (!logoutBtn) return
+  btn.addEventListener("click", async () => {
 
-  logoutBtn.addEventListener("click", async () => {
-
-    // Sign out
     await window.supabaseClient.auth.signOut()
 
-    // Clear storage
     localStorage.clear()
 
-    // IMPORTANT: kill any running loops
-    window.stop()
-
-    // Redirect safely
     window.location.replace("admin-login.html")
   })
 
