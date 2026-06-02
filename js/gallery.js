@@ -24,3 +24,5 @@ window.addEventListener("load", async () => {
     container.appendChild(el)
   })
 })
+load public images
+render gallery
