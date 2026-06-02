@@ -1,7 +1,7 @@
 // ==============================
 // CMS DASHBOARD CONTROLLER
 // ==============================
-
+window.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("load", async () => {
 
   // ==============================
@@ -353,4 +353,5 @@ window.addEventListener("load", async () => {
 
   await loadGallery()
 
+})
 })
