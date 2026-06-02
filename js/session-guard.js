@@ -1,33 +1,33 @@
+let isRedirecting = false
+
 window.addEventListener("DOMContentLoaded", async () => {
 
-  // Listen for ALL auth state changes
+  const { data } =
+    await window.supabaseClient.auth.getSession()
+
+  if (!data.session && !isRedirecting) {
+
+    isRedirecting = true
+
+    console.warn("No session - redirecting")
+
+    window.location.replace("admin-login.html")
+    return
+  }
+
   window.supabaseClient.auth.onAuthStateChange(
-    async (event, session) => {
+    (event, session) => {
 
-      // SESSION EXPIRED OR USER SIGNED OUT
-      if (!session) {
+      if (!session && !isRedirecting) {
 
-        console.warn("Session expired or invalid")
+        isRedirecting = true
 
-        // Clear local fallback session
-        localStorage.removeItem("session")
+        console.warn("Session lost - redirecting")
 
-        // Redirect to login
-        window.location.href = "admin-login.html"
+        window.location.replace("admin-login.html")
       }
 
     }
   )
-
-  // SAFETY CHECK ON PAGE LOAD
-  const { data } =
-    await window.supabaseClient.auth.getSession()
-
-  if (!data.session) {
-
-    localStorage.removeItem("session")
-
-    window.location.href = "admin-login.html"
-  }
 
 })
