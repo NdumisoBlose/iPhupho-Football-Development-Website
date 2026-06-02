@@ -15,25 +15,29 @@
 <button id="loginBtn">Login</button>
 
 <script>
-
-
-document.getElementById("loginBtn").addEventListener("click", async () => {
+document.getElementById("loginBtn")
+.addEventListener("click", async () => {
 
   const email = document.getElementById("email").value
   const password = document.getElementById("password").value
 
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  })
+  const { data, error } =
+    await window.supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    })
 
   if (error) {
-    alert("Login failed")
     console.error(error)
+    alert("Login failed")
     return
   }
 
-  localStorage.setItem("session", JSON.stringify(data.session))
+  localStorage.setItem(
+    "session",
+    JSON.stringify(data.session)
+  )
+
   window.location.href = "admin-dashboard.html"
 })
 </script>
