@@ -9,7 +9,6 @@
 <script src="./js/supabase.js"></script>
 <script src="./js/gallery-upload.js"></script>
 <script src="./js/gallery.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
   
   
 </head>
@@ -30,50 +29,52 @@
   <section class="container">
     <h2>Gallery</h2>
     <div id="gallery">
+      <video width="640" height="360" controls>
+      <source src="Training Video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+      </video>
+      <img src="Gallery/Pic 1.jpg" alt="Training picture">
+      <img src="Gallery/Pic 2.jpg" alt="Training picture">
+      <img src="Gallery/Pic 3.jpg" alt="Training picture">
+      <img src="Gallery/Pic 4.jpg" alt="Training picture">
+      <img src="Gallery/Pic 5.jpg" alt="Training picture">
+      <img src="Gallery/Pic 6.jpg" alt="Training picture">
+      <img src="Gallery/Pic 7.jpg" alt="Training picture">
+      <img src="Gallery/Pic 8.jpg" alt="Training picture">
+      <img src="Gallery/Pic 9.jpg" alt="Training picture">
+      <img src="Gallery/Pic 10.jpg" alt="Training picture">
+      <img src="Gallery/Pic 11.jpg" alt="Training picture">
+      <img src="Gallery/Pic 12.jpg" alt="Training picture">
+      <img src="Gallery/Pic 13.jpg" alt="Training picture">
+      <img src="Gallery/Pic 14.jpg" alt="Training picture">
+      <img src="Gallery/Pic 15.jpg" alt="Training picture">
+      <img src="Gallery/Pic 29.jpg" alt="Training picture">
+      <img src="Gallery/Pic 17.jpg" alt="Training picture">
+      <img src="Gallery/Pic 30.jpg" alt="Training picture">
+      <img src="Gallery/Pic 19.jpg" alt="Training picture">
+      <img src="Gallery/Pic 20.jpg" alt="Training picture">
+      <img src="Gallery/Pic 21.jpg" alt="Training picture">
+      <img src="Gallery/Pic 22.jpg" alt="Training picture">
+      <img src="Gallery/Pic 23.jpg" alt="Training picture">
+      <img src="Gallery/Pic 24.jpg" alt="Training picture">
+      <img src="Gallery/Pic 25.jpg" alt="Training picture">
+      <img src="Gallery/Pic 26.jpg" alt="Training picture">
+      <img src="Gallery/Pic 27.jpg" alt="Training picture">
+      <img src="Gallery/Pic 28.jpg" alt="Training picture">
+      <img src="Gallery/Pic 16.jpg" alt="Training picture">
+      <img src="Gallery/Pic 18.jpg" alt="Training picture">
+      <img src="Gallery/Pic 31.jpg" alt="Training picture">
+      <img src="Gallery/Pic 32.jpg" alt="Training picture">
+      <img src="Gallery/Pic 35.jpg" alt="Training picture">
+      <img src="Gallery/Pic 36.jpg" alt="Training picture">
+      <img src="Gallery/Pic 37.jpg" alt="Training picture">
+      
     </div>
-    
 
   </div>
   </section>
-
-
-<script>
-window.addEventListener("DOMContentLoaded", async () => {
-
-  const container = document.getElementById("gallery")
-
-  if (!container) {
-    console.error("Gallery container missing")
-    return
-  }
-
-  const { data, error } =
-    await window.supabaseClient
-      .from("gallery_images")
-      .select("*")
-      .order("uploaded_at", { ascending: false })
-
-  if (error) {
-    console.error("Failed to load gallery:", error)
-    return
-  }
-
-  container.innerHTML = ""
-
-  data.forEach(item => {
-
-    const img = document.createElement("img")
-
-    img.src = item.image_url
-    img.alt = item.title || "Gallery image"
-    img.loading = "lazy"
-
-    container.appendChild(img)
-  })
-})
-
-      </script>
-      
+<input type="file" id="uploadInput">
+<button id="uploadBtn">Upload</button>
   <footer>
     <p>&copy; 2024 iPhupho Football Develeopment. All rights reserved.</p>
   </footer>

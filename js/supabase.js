@@ -1,28 +1,23 @@
-
+console.log("Supabase loading...")
 
 const supabaseUrl = "https://veslqfjrjfzridzwavzu.supabase.co"
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlc2xxZmpyamZ6cmlkendhdnp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMzU1MDUsImV4cCI6MjA5NTkxMTUwNX0.Zp9y_cLr0ipTW6NRKVgl74YgTC6XszdrrkHXPJPDoWw"
 
-window.supabaseClient = supabase.createClient(
-  supabaseUrl,
-  supabaseKey
-)
+function initSupabase() {
 
-supabase.auth.onAuthStateChange((event, session) => {
-  if (session) {
-    // Only access session.access_token if session is not null
-    console.log("Access Token:", session.access_token);
-  } else {
-    // Handle logged out state
-    console.log("No active session.");
+  if (!window.supabase) {
+    console.error("Supabase CDN missing")
+    return
   }
-});
-const { data: { session } } = await supabase.auth.getSession();
 
-// Use optional chaining (?.) to prevent the TypeError
-const token = session?.access_token; 
+  const client = window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+  )
 
-if (!session) {
-    // Redirect to login or handle error
-    return;
+  window.supabaseClient = client
+
+  console.log("Supabase READY:", window.supabaseClient)
 }
+
+window.addEventListener("load", initSupabase)
