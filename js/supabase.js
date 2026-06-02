@@ -8,7 +8,7 @@ const client = window.supabase.createClient(supabaseUrl, supabaseKey)
 
 if (!window.supabase || !window.supabase.createClient) {
     console.error("Supabase CDN not loaded correctly")
-    return
+    
   }
 // expose globally
 window.supabaseClient = client
