@@ -1,11 +1,13 @@
-const session = JSON.parse(
-  localStorage.getItem("session")
-)
+window.addEventListener("load", async () => {
 
-if (!session) {
-  window.location.href = "admin-login.html"
-}
+  const session = JSON.parse(
+    localStorage.getItem("session")
+  )
 
-await window.supabaseClient.auth.setSession(
-  session
-)
+  if (!session) {
+    window.location.href = "admin-login.html"
+    return
+  }
+
+  await window.supabaseClient.auth.setSession(session)
+})
