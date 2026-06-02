@@ -39,131 +39,39 @@
 <button id="uploadBtn">Upload</button>
 
 <script>
-const session = JSON.parse(localStorage.getItem("session"))
+window.addEventListener("DOMContentLoaded", async () => {
 
-if (!session) {
-  window.location.href = "admin-login.html"
-}
+  const container = document.getElementById("gallery")
 
-
-    
-  const dropZone = document.getElementById('dropZone')
-const uploadInput = document.getElementById('uploadInput')
-const gallery = document.getElementById('gallery')
-
-  dropZone.addEventListener('click', () => {
-  uploadInput.click()
-})
-dropZone.addEventListener('dragover', e => {
-
-  e.preventDefault()
-
-dropZone.classList.add('dragover')
-})
-
-dropZone.addEventListener('dragleave', () => {
-
-  dropZone.classList.remove('dragover')
-})
-  dropZone.addEventListener('drop', async e => {
-
-  e.preventDefault()
-
-  dropZone.classList.remove('dragover')
-
-  const files = [...e.dataTransfer.files]
-
-  for (const file of files) {
-    await uploadCompressedImage(file)
-  }
-
-  await loadGallery()
-})
- uploadInput.addEventListener('change', async () => {
-
-  const files = [...uploadInput.files]
-
-  for (const file of files) {
-    await uploadCompressedImage(file)
-  }
-
-  await loadGallery()
-})
-
-   async function uploadCompressedImage(file) {
-
-  const options = {
-    maxSizeMB: 1,
-    maxWidthOrHeight: 1920,
-    useWebWorker: true
-  }
-
-  // compress image
-  const compressedFile = await imageCompression(
-    file,
-    options
-  )
-
-  const fileName = `${Date.now()}-${compressedFile.name}`
-
-  // upload to storage
-  const { error: uploadError } = await supabase.storage
-    .from('gallery')
-    .upload(fileName, compressedFile)
-
-  if (uploadError) {
-    console.error(uploadError)
-    alert("Upload failed")
+  if (!container) {
+    console.error("Gallery container missing")
     return
   }
 
-  // get public url
-  const { data } = supabase.storage
-    .from('gallery')
-    .getPublicUrl(fileName)
-
-  // save to database
-  const { error: dbError } = await supabase
-    .from('gallery_images')
-    .insert([
-      {
-        image_url: data.publicUrl
-      }
-    ])
-
-  if (dbError) {
-    console.error(dbError)
-    alert("Database insert failed")
-  }
-}
-
-    async function loadGallery() {
-
-  const { data, error } = await supabase
-    .from('gallery_images')
-    .select('*')
-    .order('created_at', {
-      ascending: false
-    })
+  const { data, error } =
+    await window.supabaseClient
+      .from("gallery_images")
+      .select("*")
+      .order("uploaded_at", { ascending: false })
 
   if (error) {
-    console.error(error)
+    console.error("Failed to load gallery:", error)
     return
   }
 
-  gallery.innerHTML = ""
+  container.innerHTML = ""
 
-  data.forEach(img => {
+  data.forEach(item => {
 
-    const image = document.createElement('img')
+    const img = document.createElement("img")
 
-    image.src = img.image_url
+    img.src = item.image_url
+    img.alt = item.title || "Gallery image"
+    img.loading = "lazy"
 
-    gallery.appendChild(image)
+    container.appendChild(img)
   })
-}
-
-    loadGallery()
+})
 
       </script>
       
