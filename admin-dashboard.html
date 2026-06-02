@@ -23,11 +23,13 @@
 <div id="uploadStatus"></div>
 
 <div id="gallery"></div>
-
+<div id="dropZone"></div>
+<div id="uploadStatus"></div>
+<div id="gallery"></div>
 <script>
 const supabase = window.supabase.createClient(
-  "https://YOUR_PROJECT.supabase.co",
-  "YOUR_ANON_KEY"
+  "https://veslqfjrjfzridzwavzu.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlc2xxZmpyamZ6cmlkendhdnp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMzU1MDUsImV4cCI6MjA5NTkxMTUwNX0.Zp9y_cLr0ipTW6NRKVgl74YgTC6XszdrrkHXPJPDoWw"
 )
 
 const session = JSON.parse(localStorage.getItem("session"))
@@ -103,6 +105,12 @@ document.getElementById("uploadBtn").addEventListener("click", async () => {
 
 loadGallery()
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+
+<script src="./js/supabase.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./js/dashboard.js"></script>
 </body>
 </html>
