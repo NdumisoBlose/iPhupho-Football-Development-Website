@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CMS Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<h2>CMS Dashboard</h2>
+
+<input type="file" id="uploadInput">
+<button id="uploadBtn">Upload</button>
+
+<div id="gallery"></div>
+
+<script>
+const supabase = window.supabase.createClient(
+  "https://YOUR_PROJECT.supabase.co",
+  "YOUR_ANON_KEY"
+)
+
+const session = JSON.parse(localStorage.getItem("session"))
+
+if (!session) {
+  window.location.href = "admin-login.html"
+}
+
+supabase.auth.setSession(session)
+
+// LOAD GALLERY
+async function loadGallery() {
+  const { data } = await supabase
+    .from('gallery_images')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  const container = document.getElementById('gallery')
+  container.innerHTML = ""
+
+  data.forEach(img => {
+
+    const wrap = document.createElement("div")
+
+    const image = document.createElement("img")
+    image.src = img.image_url
+    image.style.width = "200px"
+
+    const del = document.createElement("button")
+    del.textContent = "Delete"
+
+    del.onclick = async () => {
+
+      await supabase.storage
+        .from('gallery')
+        .remove([img.image_url.split('/').pop()])
+
+      await supabase
+        .from('gallery_images')
+        .delete()
+        .eq('image_url', img.image_url)
+
+      loadGallery()
+    }
+
+    wrap.appendChild(image)
+    wrap.appendChild(del)
+    container.appendChild(wrap)
+  })
+}
+
+// UPLOAD
+document.getElementById("uploadBtn").addEventListener("click", async () => {
+
+  const file = document.getElementById("uploadInput").files[0]
+
+  const fileName = Date.now() + "-" + file.name
+
+  await supabase.storage
+    .from('gallery')
+    .upload(fileName, file)
+
+  const { data } = supabase.storage
+    .from('gallery')
+    .getPublicUrl(fileName)
+
+  await supabase
+    .from('gallery_images')
+    .insert([{ image_url: data.publicUrl }])
+
+  loadGallery()
+})
+
+loadGallery()
+</script>
+
+</body>
+</html>
