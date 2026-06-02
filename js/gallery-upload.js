@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!uploadBtn || !uploadInput) {
     console.error("Upload elements missing")
-    return
+    
   }
 
   uploadBtn.addEventListener('click', async () => {
