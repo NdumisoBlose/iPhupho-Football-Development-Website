@@ -17,3 +17,12 @@ supabase.auth.onAuthStateChange((event, session) => {
     console.log("No active session.");
   }
 });
+const { data: { session } } = await supabase.auth.getSession();
+
+// Use optional chaining (?.) to prevent the TypeError
+const token = session?.access_token; 
+
+if (!session) {
+    // Redirect to login or handle error
+    return;
+}
