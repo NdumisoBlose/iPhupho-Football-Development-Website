@@ -24,3 +24,13 @@ window.addEventListener("DOMContentLoaded", async () => {
   })
 
 })
+const { data, error } = await window.supabaseClient.auth.getSession()
+
+const session = data?.session
+
+if (!session) {
+  console.log("No active session")
+  return
+}
+
+const token = session.access_token
