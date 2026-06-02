@@ -7,3 +7,13 @@ window.supabaseClient = supabase.createClient(
   supabaseUrl,
   supabaseKey
 )
+
+supabase.auth.onAuthStateChange((event, session) => {
+  if (session) {
+    // Only access session.access_token if session is not null
+    console.log("Access Token:", session.access_token);
+  } else {
+    // Handle logged out state
+    console.log("No active session.");
+  }
+});
