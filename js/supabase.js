@@ -14,7 +14,7 @@ if (!window.supabase || !window.supabase.createClient) {
 window.supabaseClient = client
 
 console.log("Supabase ready:", window.supabaseClient)
-}
+
 
 // run safely after page load
 window.addEventListener("DOMContentLoaded", initSupabase)
