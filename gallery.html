@@ -9,7 +9,8 @@
 <script src="./js/supabase.js"></script>
 <script src="./js/gallery-upload.js"></script>
 <script src="./js/gallery.js"></script>
-  
+  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
 </head>
 <body>
@@ -29,45 +30,7 @@
   <section class="container">
     <h2>Gallery</h2>
     <div id="gallery">
-      <video width="640" height="360" controls>
-      <source src="Training Video.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-      </video>
-      <img src="Gallery/Pic 1.jpg" alt="Training picture">
-      <img src="Gallery/Pic 2.jpg" alt="Training picture">
-      <img src="Gallery/Pic 3.jpg" alt="Training picture">
-      <img src="Gallery/Pic 4.jpg" alt="Training picture">
-      <img src="Gallery/Pic 5.jpg" alt="Training picture">
-      <img src="Gallery/Pic 6.jpg" alt="Training picture">
-      <img src="Gallery/Pic 7.jpg" alt="Training picture">
-      <img src="Gallery/Pic 8.jpg" alt="Training picture">
-      <img src="Gallery/Pic 9.jpg" alt="Training picture">
-      <img src="Gallery/Pic 10.jpg" alt="Training picture">
-      <img src="Gallery/Pic 11.jpg" alt="Training picture">
-      <img src="Gallery/Pic 12.jpg" alt="Training picture">
-      <img src="Gallery/Pic 13.jpg" alt="Training picture">
-      <img src="Gallery/Pic 14.jpg" alt="Training picture">
-      <img src="Gallery/Pic 15.jpg" alt="Training picture">
-      <img src="Gallery/Pic 29.jpg" alt="Training picture">
-      <img src="Gallery/Pic 17.jpg" alt="Training picture">
-      <img src="Gallery/Pic 30.jpg" alt="Training picture">
-      <img src="Gallery/Pic 19.jpg" alt="Training picture">
-      <img src="Gallery/Pic 20.jpg" alt="Training picture">
-      <img src="Gallery/Pic 21.jpg" alt="Training picture">
-      <img src="Gallery/Pic 22.jpg" alt="Training picture">
-      <img src="Gallery/Pic 23.jpg" alt="Training picture">
-      <img src="Gallery/Pic 24.jpg" alt="Training picture">
-      <img src="Gallery/Pic 25.jpg" alt="Training picture">
-      <img src="Gallery/Pic 26.jpg" alt="Training picture">
-      <img src="Gallery/Pic 27.jpg" alt="Training picture">
-      <img src="Gallery/Pic 28.jpg" alt="Training picture">
-      <img src="Gallery/Pic 16.jpg" alt="Training picture">
-      <img src="Gallery/Pic 18.jpg" alt="Training picture">
-      <img src="Gallery/Pic 31.jpg" alt="Training picture">
-      <img src="Gallery/Pic 32.jpg" alt="Training picture">
-      <img src="Gallery/Pic 35.jpg" alt="Training picture">
-      <img src="Gallery/Pic 36.jpg" alt="Training picture">
-      <img src="Gallery/Pic 37.jpg" alt="Training picture">
+     
       
     </div>
 
@@ -75,6 +38,139 @@
   </section>
 <input type="file" id="uploadInput">
 <button id="uploadBtn">Upload</button>
+  <script>
+    const supabase = window.supabase.createClient(
+  "https://YOUR_PROJECT.supabase.co",
+  "YOUR_ANON_KEY"
+)
+const session = JSON.parse(localStorage.getItem("session"))
+
+if (!session) {
+  window.location.href = "admin-login.html"
+}
+
+await supabase.auth.setSession(session)
+    
+  const dropZone = document.getElementById('dropZone')
+const uploadInput = document.getElementById('uploadInput')
+const gallery = document.getElementById('gallery')
+
+  dropZone.addEventListener('click', () => {
+  uploadInput.click()
+})
+dropZone.addEventListener('dragover', e => {
+
+  e.preventDefault()
+
+dropZone.classList.add('dragover')
+})
+
+dropZone.addEventListener('dragleave', () => {
+
+  dropZone.classList.remove('dragover')
+})
+  dropZone.addEventListener('drop', async e => {
+
+  e.preventDefault()
+
+  dropZone.classList.remove('dragover')
+
+  const files = [...e.dataTransfer.files]
+
+  for (const file of files) {
+    await uploadCompressedImage(file)
+  }
+
+  await loadGallery()
+})
+ uploadInput.addEventListener('change', async () => {
+
+  const files = [...uploadInput.files]
+
+  for (const file of files) {
+    await uploadCompressedImage(file)
+  }
+
+  await loadGallery()
+})
+
+   async function uploadCompressedImage(file) {
+
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true
+  }
+
+  // compress image
+  const compressedFile = await imageCompression(
+    file,
+    options
+  )
+
+  const fileName = `${Date.now()}-${compressedFile.name}`
+
+  // upload to storage
+  const { error: uploadError } = await supabase.storage
+    .from('gallery')
+    .upload(fileName, compressedFile)
+
+  if (uploadError) {
+    console.error(uploadError)
+    alert("Upload failed")
+    return
+  }
+
+  // get public url
+  const { data } = supabase.storage
+    .from('gallery')
+    .getPublicUrl(fileName)
+
+  // save to database
+  const { error: dbError } = await supabase
+    .from('gallery_images')
+    .insert([
+      {
+        image_url: data.publicUrl
+      }
+    ])
+
+  if (dbError) {
+    console.error(dbError)
+    alert("Database insert failed")
+  }
+}
+
+    async function loadGallery() {
+
+  const { data, error } = await supabase
+    .from('gallery_images')
+    .select('*')
+    .order('created_at', {
+      ascending: false
+    })
+
+  if (error) {
+    console.error(error)
+    return
+  }
+
+  gallery.innerHTML = ""
+
+  data.forEach(img => {
+
+    const image = document.createElement('img')
+
+    image.src = img.image_url
+
+    gallery.appendChild(image)
+  })
+}
+
+    loadGallery()
+
+      </script>
+      
   <footer>
     <p>&copy; 2024 iPhupho Football Develeopment. All rights reserved.</p>
   </footer>
