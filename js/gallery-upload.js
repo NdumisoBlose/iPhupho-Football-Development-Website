@@ -1,53 +1,76 @@
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", () => {
 
-  const uploadBtn = document.getElementById('uploadBtn')
-  const uploadInput = document.getElementById('uploadInput')
+  const uploadBtn = document.getElementById("uploadBtn")
+  const uploadInput = document.getElementById("uploadInput")
+  const status = document.getElementById("uploadStatus")
 
+  // SAFETY CHECK (prevents null errors)
   if (!uploadBtn || !uploadInput) {
-    console.error("Upload elements missing")
-    
+    console.warn("Upload elements not found (expected in admin only)")
+    return
   }
 
-  uploadBtn.addEventListener('click', async () => {
+  uploadBtn.addEventListener("click", async () => {
 
     const file = uploadInput.files[0]
-    if (!file) return alert("Select a file")
+
+    if (!file) {
+      alert("Please select a file")
+      return
+    }
 
     const fileName = `${Date.now()}-${file.name}`
 
-    // 1. Upload to Storage
-    const { error: uploadError } = await window.supabaseClient.storage
-      .from('gallery')
-      .upload(fileName, file)
+    // -------------------------
+    // 1. UPLOAD TO STORAGE
+    // -------------------------
+    const { error: uploadError } =
+      await window.supabaseClient
+        .storage
+        .from("gallery")
+        .upload(fileName, file)
 
     if (uploadError) {
       console.error(uploadError)
-      return alert("Upload failed")
+      status.textContent = "Upload failed"
+      return
     }
 
-    // 2. Get Public URL
-    const { data } = window.supabaseClient.storage
-      .from('gallery')
-      .getPublicUrl(fileName)
+    // -------------------------
+    // 2. GET PUBLIC URL
+    // -------------------------
+    const { data } =
+      window.supabaseClient
+        .storage
+        .from("gallery")
+        .getPublicUrl(fileName)
 
-    // 3. Insert into DB
-    const { error: dbError } = await window.supabaseClient
-      .from('gallery_images')
-      .insert([{ image_url: data.publicUrl }])
+    // -------------------------
+    // 3. INSERT INTO DATABASE
+    // -------------------------
+    const { error: dbError } =
+      await window.supabaseClient
+        .from("gallery_images")
+        .insert([
+          {
+            image_url: data.publicUrl
+          }
+        ])
 
     if (dbError) {
       console.error(dbError)
-      return alert("Database insert failed")
+      status.textContent = "Database insert failed"
+      return
     }
 
-    alert("Upload successful")
-    const container = document.getElementById('gallery')
+    status.textContent = "Upload successful"
 
-const newImage = document.createElement('img')
-newImage.src = data.publicUrl
-newImage.loading = "lazy"
+    // -------------------------
+    // 4. REFRESH CMS GALLERY
+    // -------------------------
+    if (typeof loadGallery === "function") {
+      loadGallery()
+    }
 
-container.prepend(newImage)
   })
-
 })
