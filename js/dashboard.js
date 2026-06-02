@@ -1,20 +1,6 @@
 // ==============================
 // CMS DASHBOARD CONTROLLER
 // ==============================
-let intervalId
-
-window.addEventListener("DOMContentLoaded", () => {
-
-  intervalId = setInterval(() => {
-    console.log("running")
-  }, 5000)
-
-})
-
-window.addEventListener("beforeunload", () => {
-  clearInterval(intervalId)
-})
-
 window.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("load", async () => {
 
