@@ -41,7 +41,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     alert("Upload successful")
-    location.reload()
+    const container = document.getElementById('gallery')
+
+const newImage = document.createElement('img')
+newImage.src = data.publicUrl
+newImage.loading = "lazy"
+
+container.prepend(newImage)
   })
 
 })
