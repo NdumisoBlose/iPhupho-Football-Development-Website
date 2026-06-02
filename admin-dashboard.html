@@ -1,107 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>CMS Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+
+  <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="./js/supabase.js"></script>
-  <script src="./js/auth.js"></script>
-<script src="./js/dashboard.js"></script>
+
+  <!-- Image compression -->
+  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./styles.css">
 </head>
+
 <body>
 
-<h2>CMS Dashboard</h2>
+  <!-- ===================== -->
+  <!-- DASHBOARD UI ONLY -->
+  <!-- ===================== -->
 
-<div id="dropZone">
-  Drag & Drop Images Here
-  <input type="file" id="uploadInput" hidden>
-</div>
+  <h1>CMS Dashboard</h1>
 
-<div id="uploadStatus"></div>
-<div id="gallery"></div>
-  
-<script>
+  <!-- DRAG & DROP AREA -->
+  <div id="dropZone">
+    <p>Drag & Drop Images Here</p>
+    <input type="file" id="uploadInput" multiple hidden>
+  </div>
 
+  <!-- UPLOAD STATUS -->
+  <div id="uploadStatus"></div>
 
-const session = JSON.parse(localStorage.getItem("session"))
+  <!-- GALLERY -->
+  <div id="gallery"></div>
 
-if (!session) {
-  window.location.href = "admin-login.html"
-}
+  <!-- ===================== -->
+  <!-- SCRIPTS (ORDER MATTERS) -->
+  <!-- ===================== -->
 
+  <script src="./js/supabase.js"></script>
+  <script src="./js/auth.js"></script>
+  <script src="./js/dashboard.js"></script>
 
-
-// LOAD GALLERY
-async function loadGallery() {
-  const { data } = await supabase
-    .from('gallery_images')
-    .select('*')
-    .order('created_at', { ascending: false })
-
-  const container = document.getElementById('gallery')
-  container.innerHTML = ""
-
-  data.forEach(img => {
-
-    const wrap = document.createElement("div")
-
-    const image = document.createElement("img")
-    image.src = img.image_url
-    image.style.width = "200px"
-
-    const del = document.createElement("button")
-    del.textContent = "Delete"
-
-    del.onclick = async () => {
-
-      await supabase.storage
-        .from('gallery')
-        .remove([img.image_url.split('/').pop()])
-
-      await supabase
-        .from('gallery_images')
-        .delete()
-        .eq('image_url', img.image_url)
-
-      loadGallery()
-    }
-
-    wrap.appendChild(image)
-    wrap.appendChild(del)
-    container.appendChild(wrap)
-  })
-}
-
-// UPLOAD
-document.getElementById("uploadBtn").addEventListener("click", async () => {
-
-  const file = document.getElementById("uploadInput").files[0]
-
-  const fileName = Date.now() + "-" + file.name
-
-  await supabase.storage
-    .from('gallery')
-    .upload(fileName, file)
-
-  const { data } = supabase.storage
-    .from('gallery')
-    .getPublicUrl(fileName)
-
-  await supabase
-    .from('gallery_images')
-    .insert([{ image_url: data.publicUrl }])
-
-  loadGallery()
-})
-
-loadGallery()
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
-
-<script src="./js/supabase.js"></script>
-<script src="./js/auth.js"></script>
-<script src="./js/dashboard.js"></script>
 </body>
 </html>
