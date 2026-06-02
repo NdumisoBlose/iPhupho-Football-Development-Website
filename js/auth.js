@@ -6,7 +6,7 @@ window.addEventListener("load", async () => {
 
   if (!session) {
     window.location.href = "admin-login.html"
-    return
+    
   }
 
   await window.supabaseClient.auth.setSession(session)
