@@ -92,7 +92,7 @@ nav ul li a:hover {
 -------------------------------- */
 .hero {
   background: linear-gradient(rgba(13, 27, 42, 0.7), rgba(13, 27, 42, 0.7)),
-              url('hero\ background\ pic.jpeg') center/cover no-repeat;
+              url('hero-background-pic.jpeg') center/cover no-repeat;
   color: #FFFFFF;
   height: 80vh;
   display: flex;
