@@ -1,16 +1,12 @@
-let isRedirecting = false
+let redirecting = false
 
 window.addEventListener("DOMContentLoaded", async () => {
 
   const { data } =
     await window.supabaseClient.auth.getSession()
 
-  if (!data.session && !isRedirecting) {
-
-    isRedirecting = true
-
-    console.warn("No session - redirecting")
-
+  if (!data.session && !redirecting) {
+    redirecting = true
     window.location.replace("admin-login.html")
     return
   }
@@ -18,12 +14,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   window.supabaseClient.auth.onAuthStateChange(
     (event, session) => {
 
-      if (!session && !isRedirecting) {
-
-        isRedirecting = true
-
-        console.warn("Session lost - redirecting")
-
+      if (!session && !redirecting) {
+        redirecting = true
         window.location.replace("admin-login.html")
       }
 
