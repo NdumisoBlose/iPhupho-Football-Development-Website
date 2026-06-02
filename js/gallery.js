@@ -1,4 +1,10 @@
-document.addEventListener("DOMContentLoaded", async () => {
+window.addEventListener("load", async () => {
+
+  // HARD SAFETY CHECK
+  if (!window.supabaseClient) {
+    console.error("Supabase not ready")
+    return
+  }
 
   const container = document.getElementById('gallery')
   if (!container) return
@@ -9,10 +15,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (error) {
     console.error(error)
-    
+    return
   }
 
   container.innerHTML = data.map(img => `
-    <img src="${img.image_url}" loading="lazy" />
+    <img src="${img.image_url}" />
   `).join('')
 })
