@@ -1,3 +1,4 @@
+// ONLY HERE
 let redirecting = false
 
 window.addEventListener("DOMContentLoaded", async () => {
@@ -5,21 +6,21 @@ window.addEventListener("DOMContentLoaded", async () => {
   const { data } =
     await window.supabaseClient.auth.getSession()
 
-  if (!data.session && !redirecting) {
+  const session = data?.session
+
+  if (!session && !redirecting) {
     redirecting = true
     window.location.replace("admin-login.html")
     return
   }
 
-  window.supabaseClient.auth.onAuthStateChange(
-    (event, session) => {
+  window.supabaseClient.auth.onAuthStateChange((event, session) => {
 
-      if (!session && !redirecting) {
-        redirecting = true
-        window.location.replace("admin-login.html")
-      }
-
+    if (!session && !redirecting) {
+      redirecting = true
+      window.location.replace("admin-login.html")
     }
-  )
+
+  })
 
 })
