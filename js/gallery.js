@@ -1,28 +1,34 @@
-window.addEventListener("load", async () => {
+window.addEventListener("DOMContentLoaded", async () => {
 
-  if (!window.supabaseClient) return
+  const container = document.getElementById("gallery")
 
-  const container = document.getElementById('gallery')
-  if (!container) return
-
-  const { data, error } = await window.supabaseClient
-    .from('gallery_images')
-    .select('*')
-    .order('created_at', { ascending: false })
-
-  if (error) {
-    console.error(error)
+  if (!container) {
+    console.error("Gallery container missing")
     return
   }
 
+  const { data, error } =
+    await window.supabaseClient
+      .from("gallery_images")
+      .select("*")
+      .order("uploaded_at", { ascending: false })
+
+  if (error) {
+    console.error("Fetch error:", error)
+    return
+  }
+
+  console.log("Gallery data:", data)
+
   container.innerHTML = ""
 
-  data.forEach(img => {
-    const el = document.createElement('img')
-    el.src = img.image_url
-    el.loading = "lazy"
-    container.appendChild(el)
+  data.forEach(item => {
+
+    const img = document.createElement("img")
+
+    img.src = item.image_url
+    img.loading = "lazy"
+
+    container.appendChild(img)
   })
 })
-load public images
-render gallery
