@@ -1,47 +1,39 @@
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", () => {
 
-  const uploadBtn = document.getElementById('uploadBtn')
-  const uploadInput = document.getElementById('uploadInput')
+  const btn = document.getElementById("uploadBtn")
+  const input = document.getElementById("uploadInput")
 
-  if (!uploadBtn || !uploadInput) {
-    console.error("Upload elements missing")
-    
-  }
+  if (!btn || !input) return
 
-  uploadBtn.addEventListener('click', async () => {
+  btn.addEventListener("click", async () => {
 
-    const file = uploadInput.files[0]
+    const file = input.files[0]
     if (!file) return alert("Select a file")
 
     const fileName = `${Date.now()}-${file.name}`
 
-    // 1. Upload to Storage
-    const { error: uploadError } = await window.supabaseClient.storage
-      .from('gallery')
-      .upload(fileName, file)
+    // upload to storage
+    const { error: uploadError } =
+      await window.supabaseClient.storage
+        .from("gallery")
+        .upload(fileName, file)
 
-    if (uploadError) {
-      console.error(uploadError)
-      return alert("Upload failed")
-    }
+    if (uploadError) return console.error(uploadError)
 
-    // 2. Get Public URL
-    const { data } = window.supabaseClient.storage
-      .from('gallery')
-      .getPublicUrl(fileName)
+    // public URL
+    const { data } =
+      window.supabaseClient.storage
+        .from("gallery")
+        .getPublicUrl(fileName)
 
-    // 3. Insert into DB
-    const { error: dbError } = await window.supabaseClient
-      .from('gallery_images')
-      .insert([{ image_url: data.publicUrl }])
+    // database insert
+    const { error: dbError } =
+      await window.supabaseClient
+        .from("gallery_images")
+        .insert([{ image_url: data.publicUrl }])
 
-    if (dbError) {
-      console.error(dbError)
-      return alert("Database insert failed")
-    }
+    if (dbError) return console.error(dbError)
 
     alert("Upload successful")
-    location.reload()
   })
-
 })
