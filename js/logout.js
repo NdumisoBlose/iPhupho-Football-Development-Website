@@ -1,28 +1,25 @@
-window.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-  const logoutBtn = document.getElementById("logoutBtn")
+  const logoutBtn =
+    document.getElementById("logoutBtn")
 
-  if (!logoutBtn) {
-    console.warn("Logout button not found")
-    return
-  }
+  if (!logoutBtn) return
 
   logoutBtn.addEventListener("click", async () => {
 
-    // 1. Supabase logout
     const { error } =
       await window.supabaseClient.auth.signOut()
 
     if (error) {
-      console.error("Logout error:", error)
+      console.error(error)
+      alert("Logout failed")
       return
     }
 
-    // 2. Clear local session storage
-    localStorage.removeItem("session")
+    alert("Logged out successfully")
 
-    // 3. Redirect to login
-    window.location.href = "admin-login.html"
+    window.location.replace("admin-login.html")
+
   })
 
 })
