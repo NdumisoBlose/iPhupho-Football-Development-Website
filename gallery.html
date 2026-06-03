@@ -1,15 +1,14 @@
 <!DOCTYPE html>
+<html lang<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Soccer Academy | Gallery</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="./js/supabase.js"></script>
-  <!-- Public gallery renderer -->
-<script src="./js/gallery.js"></script>  
-  
+
 </head>
 <body>
   <nav class="navbar">
@@ -36,8 +35,10 @@
   <footer>
     <p>&copy; 2024 iPhupho Football Develeopment. All rights reserved.</p>
   </footer>
- 
 
+  <!-- Scripts at end of body: DOM exists, Supabase CDN already loaded -->
+  <script src="./js/supabase.js"></script>
+  <script src="./js/gallery.js"></script>
 
 </body>
 </html>

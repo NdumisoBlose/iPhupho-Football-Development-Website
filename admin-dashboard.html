@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Dashboard</title>
 
-  <!-- Supabase CDN -->
+  <!-- Supabase CDN — must load before any of your JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Image compression -->
@@ -12,6 +12,7 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="./styles.css">
+
 </head>
 
 <body>
@@ -23,27 +24,37 @@
   <h1>CMS Dashboard</h1>
 
   <!-- DRAG & DROP AREA -->
-  <div id="dropZone">
-    <p>Drag & Drop Images Here</p>
-    <input type="file" id="uploadInput" multiple hidden>
-  </div>
+  <div id="dropZone" class="drop-zone">
+  <p>Drag & drop image here or click to select</p>
+  <input 
+  type="file" 
+  id="uploadInput" 
+  multiple 
+  accept="image/*,video/*" 
+  hidden
+/>
+</div>
+
+<button id="uploadBtn">Upload</button>
 
   <!-- UPLOAD STATUS -->
   <div id="uploadStatus"></div>
 
   <!-- GALLERY -->
-  <div id="gallery"></div>
+  <div id="adminGallery" class="admin-grid"></div>
+
+  <button id="logoutBtn">Logout</button>
 
   <!-- ===================== -->
   <!-- SCRIPTS (ORDER MATTERS) -->
+  <!-- Must be at end of body so DOM elements exist when scripts run.
+       Supabase CDN is in <head> so it's ready by the time these execute. -->
   <!-- ===================== -->
-<button id="logoutBtn">Logout</button>
-  
-  <script src="./js/supabase.js"></script>
-  <script src="./js/auth.js"></script>
-  <script src="./js/dashboard.js"></script>
-  <script src="./js/gallery-upload.js"></script>
-  <script src="./js/logout.js"></script>
+  <script src="./js/supabase.js"></script>   <!-- sets up window.supabaseClient -->
+  <script src="./js/auth.js"></script>        <!-- depends on supabaseClient -->
+  <script src="./js/dashboard.js"></script>   <!-- depends on supabaseClient -->
+  <script src="./js/gallery-upload.js"></script> <!-- depends on supabaseClient + DOM -->
+  <script src="./js/logout.js"></script>      <!-- depends on supabaseClient -->
 
 </body>
 </html>
