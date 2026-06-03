@@ -31,3 +31,10 @@ window.addEventListener("DOMContentLoaded", async () => {
     container.appendChild(img)
   })
 })
+const uploadBtn = document.getElementById("uploadBtn")
+
+if (uploadBtn) {
+  uploadBtn.addEventListener("click", () => {
+    console.log("Upload triggered")
+  })
+}
