@@ -6,8 +6,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loginBtn.addEventListener("click", async () => {
 
-    const email = document.getElementById("email").value
-    const password = document.getElementById("password").value
+    const email =
+      document.getElementById("email").value
+
+    const password =
+      document.getElementById("password").value
 
     const { data, error } =
       await window.supabaseClient.auth.signInWithPassword({
@@ -16,12 +19,15 @@ document.addEventListener("DOMContentLoaded", () => {
       })
 
     if (error) {
-      alert("Login failed")
       console.error(error)
+      alert("Login failed")
       return
     }
 
-    window.location.replace("admin-dashboard.html")
+    alert("Login successful")
+
+    window.location.href = "admin-dashboard.html"
+
   })
 
 })
