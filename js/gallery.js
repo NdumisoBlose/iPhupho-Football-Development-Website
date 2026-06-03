@@ -2,7 +2,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   const container = document.getElementById("gallery")
 
-  if (!container) return
+  if (!container) {
+    console.error("Gallery container missing")
+    return
+  }
 
   const { data, error } =
     await window.supabaseClient
@@ -11,19 +14,20 @@ window.addEventListener("DOMContentLoaded", async () => {
       .order("uploaded_at", { ascending: false })
 
   if (error) {
-    console.error(error)
-    
+    console.error("Failed to load gallery:", error)
+    return
   }
 
   container.innerHTML = ""
 
-  data.forEach(img => {
+  data.forEach(item => {
 
-    const el = document.createElement("img")
+    const img = document.createElement("img")
 
-    el.src = img.image_url
-    el.loading = "lazy"
+    img.src = item.image_url
+    img.alt = item.title || "Gallery image"
+    img.loading = "lazy"
 
-    container.appendChild(el)
+    container.appendChild(img)
   })
 })
